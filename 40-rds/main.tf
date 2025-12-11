@@ -58,4 +58,24 @@ module "db" {
       ]
     },
   ]
-} 
+}
+
+module "records" {
+  source  = "terraform-aws-modules/route53/aws//modules/records"
+  version = "4.1.0" # specified the version used by shiva in training or else this will take latest version as default
+
+  zone_name = var.zone_name
+
+  records = [
+    {
+      name = "mysql-${var.environment}" #mysql-dev.dawsconnect.org
+      type = "CNAME"
+      ttl  = 1
+      records = [
+        module.db.db_instance_address
+      ]
+      allow_overwrite = true
+    },
+  ]
+
+}

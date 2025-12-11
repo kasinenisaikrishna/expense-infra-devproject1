@@ -19,3 +19,7 @@ variable "rds_tags" {
     Component = "mysql"
   }
 }
+
+variable "zone_name" {
+  default = "dawsconnect.org"
+}
