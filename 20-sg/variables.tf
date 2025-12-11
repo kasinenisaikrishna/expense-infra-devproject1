@@ -43,3 +43,9 @@ variable "ansible_sg_tags" {
     Component = "ansible"
   }
 }
+
+variable "app_alb_sg_tags" {
+  default = {
+    Component = "app-alb"
+  }
+}
