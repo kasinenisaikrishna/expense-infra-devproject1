@@ -17,3 +17,9 @@ variable "common_tags" {
 variable "zone_name" {
   default = "dawsconnect.org"
 }
+
+variable "app_alb_sg_tags" {
+  default = {
+    Component = "app-alb"
+  }
+}
