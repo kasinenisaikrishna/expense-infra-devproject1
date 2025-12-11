@@ -9,6 +9,6 @@ module "app_alb" {
 
   tags = merge(
     var.common_tags,
-    var.app_alb_sg_tags
+    var.app_alb_tags
   )
 }
