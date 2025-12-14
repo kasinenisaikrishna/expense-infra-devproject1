@@ -50,3 +50,9 @@ resource "aws_ec2_instance_state" "backend" {
   state       = "stopped"
   depends_on  = [null_resource.backend]
 }
+
+resource "aws_ami_from_instance" "backend" {
+  name               = local.resource_name
+  source_instance_id = module.backend.id
+  depends_on         = [aws_ec2_instance_state.backend]
+}
