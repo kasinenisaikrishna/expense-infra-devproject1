@@ -44,3 +44,8 @@ resource "null_resource" "backend" {
     ]
   }
 }
+
+resource "aws_ec2_instance_state" "backend" {
+  instance_id = module.backend.id
+  state       = "stopped"
+}
