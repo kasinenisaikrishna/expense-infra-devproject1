@@ -150,3 +150,18 @@ resource "aws_autoscaling_policy" "example" {
     target_value = 70.0
   }
 }
+
+resource "aws_lb_listener_rule" "backend" {
+  listener_arn = "${aws_lb_listener.front_end.arn}"
+  priority     = 100
+
+  action {
+    type             = "forward"
+    target_group_arn = "${aws_lb_target_group.static.arn}"
+  }
+
+  condition {
+    field  = "path-pattern"
+    values = ["/static/*"]
+  }
+}
