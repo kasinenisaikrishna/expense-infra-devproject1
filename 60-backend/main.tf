@@ -86,3 +86,22 @@ resource "aws_lb_target_group" "backend" {
     timeout             = 4
   }
 }
+
+resource "aws_launch_template" "backend" {
+
+  name                                 = local.resource_name
+  image_id                             = aws_ami_from_instance.backend.id
+  instance_initiated_shutdown_behavior = "terminate"
+  instance_type                        = "t3.micro"
+  subnet_id                            = local.private_subnet_id
+  update_default_version               = true
+  vpc_security_group_ids               = [local.backend_sg_id]
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name = local.resource_name
+    }
+  }
+}
