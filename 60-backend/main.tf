@@ -57,8 +57,15 @@ resource "aws_ami_from_instance" "backend" {
   depends_on         = [aws_ec2_instance_state.backend]
 }
 
-resource "aws_ec2_instance_state" "backend_delete" {
-  instance_id = module.backend.id
-  state       = "delete"
-  depends_on  = [null_resource.backend]
+resource "null_resource" "backend_delete" {
+  # Changes to any instance of the cluster requires re-provisioning
+  triggers = {
+    instance_id = module.backend.id
+  }
+
+  provisioner "local-exec" {
+    command = "aws ec2 terminate-instances --instance-ids ${module.backend.id}"
+  }
+
+  depends_on = [aws_ami_from_instance.backend]
 }
