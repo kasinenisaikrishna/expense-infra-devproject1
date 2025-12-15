@@ -69,3 +69,10 @@ resource "null_resource" "backend_delete" {
 
   depends_on = [aws_ami_from_instance.backend]
 }
+
+resource "aws_lb_target_group" "backend" {
+  name     = local.resource_name
+  port     = 8080
+  protocol = "HTTP"
+  vpc_id   = local.vpc_id
+}
