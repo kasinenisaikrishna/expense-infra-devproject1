@@ -56,3 +56,9 @@ resource "aws_ami_from_instance" "backend" {
   source_instance_id = module.backend.id
   depends_on         = [aws_ec2_instance_state.backend]
 }
+
+resource "aws_ec2_instance_state" "backend" {
+  instance_id = module.backend.id
+  state       = "delete"
+  depends_on  = [null_resource.backend]
+}
