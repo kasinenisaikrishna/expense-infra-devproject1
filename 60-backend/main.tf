@@ -105,3 +105,48 @@ resource "aws_launch_template" "backend" {
     }
   }
 }
+
+resource "aws_autoscaling_group" "backend" {
+  name                      = local.resource_name
+  max_size                  = 10
+  min_size                  = 2
+  health_check_grace_period = 60
+  health_check_type         = "ELB"
+  desired_capacity          = 2 # starting of the auto scaling group
+  # force_delete              = true
+  launch_template {
+    id      = aws_launch_template.backend.id
+    version = "$Latest"
+  }
+  vpc_zone_identifier = [local.private_subnet_id]
+
+  tag {
+    key                 = "Name"
+    value               = local.resource_name
+    propagate_at_launch = true
+  }
+
+  # if instances are not healthy with in 15mins, autoscaling will delete that instance
+  timeouts {
+    delete = "15m"
+  }
+
+  tag {
+    key                 = "Project"
+    value               = "Expense"
+    propagate_at_launch = false
+  }
+}
+
+resource "aws_autoscaling_policy" "example" {
+  name                   = local.resource_name
+  policy_type            = "TargetTrackingScaling"
+  autoscaling_group_name = aws_autoscaling_group.backend.name
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 70.0
+  }
+}
