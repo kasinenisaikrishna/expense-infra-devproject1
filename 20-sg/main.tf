@@ -63,7 +63,16 @@ module "vpn_sg" {
   source       = "git::https://github.com/kasinenisaikrishna/terraform-aws-security-group-p1.git?ref=main"
   project_name = var.project_name
   environment  = var.environment
-  sg_name      = "vpn" #expense-dev-app-alb
+  sg_name      = "vpn" 
+  vpc_id       = local.vpc_id
+  common_tags  = var.common_tags
+}
+
+module "web_alb_sg" {
+  source       = "git::https://github.com/kasinenisaikrishna/terraform-aws-security-group-p1.git?ref=main"
+  project_name = var.project_name
+  environment  = var.environment
+  sg_name      = "web_alb" 
   vpc_id       = local.vpc_id
   common_tags  = var.common_tags
 }
